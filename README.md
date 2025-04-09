@@ -1,106 +1,96 @@
-🚗 Loan Default Prediction using Machine Learning
-This project focuses on building a predictive model to identify car loan defaulters using a dataset of over 120,000 records. The goal is to improve risk assessment strategies for financial institutions and reduce losses due to unpaid loans.
+# 🚗 Loan Default Prediction using Machine Learning
 
-📊 Dataset Overview
-Size: 121,856 records, 40 features
+This project focuses on predicting car loan defaulters using machine learning techniques. Using a dataset of 120K+ records, we aimed to improve risk assessment for financial institutions by identifying potential default cases more accurately.
 
-Type: Mix of numerical and categorical variables
+---
 
-Source: Proprietary/educational dataset
+## 📂 Dataset Overview
 
-Target Variable: Defaulted (1 = default, 0 = non-default)
+- **Rows:** 121,856  
+- **Features:** 40 (numerical + categorical)  
+- **Target Variable:** `Defaulted` (1 = default, 0 = non-default)
 
-🧹 Data Preprocessing
-Missing values:
+---
 
-Mode used for categorical features
+## 🧹 Data Preprocessing
 
-Median used for numerical features
+- **Missing Value Treatment:**
+  - Categorical: Mode
+  - Numerical: Median
+- **Feature Removal:** Dropped high-missing-value columns (`Own_House_Age`, `Score_Source_1`)
+- **Encoding:** Dummy (N-1) encoding for categorical features
+- **Outliers:** Handled skewness in income, loan amount, and family size
+- **Split:** 80% training / 20% testing
 
-Feature removal: Dropped high-missing-value columns (e.g., Own_House_Age, Score_Source_1)
+---
 
-Outliers: Handled skewed distributions in income, loan amount, family size
+## 📊 Exploratory Data Analysis
 
-Encoding: Dummy encoding for categorical variables
+- Most clients are married, own a house, and have secondary education
+- Very few clients own a car or bike
+- Loan applications peaked on **Tuesdays**
+- **Strong correlation:** `Family_Size` & `Child_Count`
+- **Moderate correlation:** `Loan_Amount` & `Annuity`
 
-Train-test split: 80% training / 20% testing
+---
 
-📈 Exploratory Data Analysis
-Most clients:
+## 📈 Statistical Insights
 
-Are married
+- **Chi-Square Analysis:**
+  - Significant features: `Car_Owned`, `Client_Education`, `Client_Income_Type`
+  - Non-significant: `Bike_Owned`, `Mobile_Tag`, `Active_Loan`
+- **Class Imbalance:** Defaulted loans are underrepresented
 
-Own a house
+---
 
-Have secondary education
+## 🤖 Model Evaluation
 
-Few own a car or bike
+| Model                  | Accuracy | Recall (Class 1) | Notes |
+|------------------------|----------|------------------|-------|
+| Logistic Regression    | 59%      | 0.53             | Biased toward class 0 |
+| Decision Tree          | 59%      | 0.53             | Low F1-score for defaults |
+| Random Forest          | 92%      | 0.00             | High overfitting |
+| AdaBoost               | 88%      | ~0.26            | Poor recall |
+| XGBoost                | 92%      | 0.03             | High accuracy, poor default detection |
+| Gradient Boosting      | 92%      | 0.03             | Skewed toward class 0 |
+| **LightGBM (Best)**    | **71%**  | **0.64**         | Best overall performance |
 
-Loan applications peaked on Tuesdays
+---
 
-Strong correlation: Family_Size vs Child_Count
+## 🔧 Model Tuning
 
-Moderate correlation: Loan_Amount vs Annuity
+- **Class Imbalance Solutions:**
+  - SMOTE
+  - Class weighting
+  - Cost-sensitive learning
+- **Parameter Tuning:** GridSearchCV, RandomizedSearchCV
+- **Threshold Adjustment:** Custom probability thresholds to improve recall
 
-📊 Statistical Insights
-Chi-square tests show features like:
+---
 
-Car_Owned, Client_Income_Type, Client_Education are dependent on loan default
+## ✅ Final Model: LightGBM
 
-Class imbalance observed:
+- **Accuracy:** 71%  
+- **Recall (Defaulted):** 64%  
+- **Precision:** 17%  
+- **Macro F1-score:** 0.54  
+- **Remarks:** Balanced performance with better handling of the minority class
 
-Defaulters are underrepresented
+---
 
-Required special handling during modeling
+## ⚠️ Limitations
 
-🤖 Models Compared
-Model	Accuracy	Recall (Class 1)	Macro F1	Notes
-Logistic Regression	59%	0.53	Low	Biased toward class 0
-Decision Tree	59%	0.53	Low	Similar to logistic regression
-Random Forest	92%	0.00	Poor	High overfitting
-AdaBoost	88%	~0.26	Poor	Weak on minority class
-XGBoost	92%	0.03	Very Poor	Good accuracy, poor recall
-Gradient Boosting	92%	0.03	Very Poor	Skewed predictions
-LightGBM (Best)	71%	0.64	0.54	Best balance between precision & recall
-🛠️ Model Tuning Techniques
-Class Imbalance: Handled using:
+- Low precision for positive (default) class
+- Models struggle with class imbalance
+- Trade-off between precision and recall
+- Some models overfit (e.g., Random Forest, XGBoost)
 
-SMOTE
+---
 
-Class weights
+## 🚀 Future Work
 
-Cost-sensitive learning
+- Ensemble stacking
+- More robust cost-sensitive optimization
+- Real-time deployment scenarios
 
-Hyperparameter tuning:
-
-GridSearchCV & RandomizedSearchCV
-
-Threshold tuning: Adjusted to improve sensitivity for defaults
-
-✅ Final Model: LightGBM
-Accuracy: 71%
-
-Recall (Defaults): 64%
-
-Precision: 17%
-
-Macro F1-score: 0.54
-
-Notes: Best performance on imbalanced data, still room to improve false positives
-
-⚠️ Limitations
-Class imbalance significantly affects prediction quality
-
-Precision for class 1 is low (many false positives)
-
-Some models suffer from overfitting
-
-Trade-off between precision and recall needs further optimization
-
-🚀 Future Work
-Ensemble stacking of top models
-
-Advanced cost-sensitive techniques
-
-Real-time deployment for live loan applications
-
+---
